@@ -1,19 +1,9 @@
-// ignore_for_file: avoid_print
-
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_bloc_emi_calculator/bloc/emi_bloc.dart';
 
-class EmiScreen extends StatefulWidget {
+class EmiScreen extends StatelessWidget {
   const EmiScreen({super.key});
-
-  @override
-  State<EmiScreen> createState() => _EmiScreenState();
-}
-
-class _EmiScreenState extends State<EmiScreen> {
-  double r = 0, emi = 0, upperValue = 0, lowerValue = 0;
-  double amount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -69,30 +59,28 @@ class _EmiScreenState extends State<EmiScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                //double r, emi, upperValue, lowerValue;
-                r = double.parse(rate.text) / 12;
-                r = r / 100;
-                final powerValue = pow(1 + r, int.parse(months.text));
-                upperValue = r * powerValue;
-                lowerValue = powerValue - 1;
-                emi = double.parse(principle.text) * upperValue / lowerValue;
-                print("R value: $r");
-                print("Power value: $powerValue");
-                print("upper value: $upperValue");
-                print("lower value: $lowerValue");
-                print(emi);
-                setState(() {
-                  amount = emi;
-                });
+                context.read<EmiBloc>().add(
+                      EmiCalculationEvent(
+                        principle: double.parse(principle.text),
+                        rate: double.parse(rate.text),
+                        months: double.parse(months.text),
+                      ),
+                    );
               },
               child: const Text('Calculate'),
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(
-              "Amount : $amount",
-              style: const TextStyle(fontSize: 18),
+            BlocBuilder<EmiBloc, EmiState>(
+              builder: ((context, state) {
+                return Text(
+                  '${state.emi}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                );
+              }),
             ),
           ],
         ),
