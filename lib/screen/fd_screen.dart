@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_bloc_emi_calculator/bloc/emi_bloc.dart';
+import 'package:my_bloc_emi_calculator/bloc/fd_bloc.dart';
 
-class EmiScreen extends StatelessWidget {
-  const EmiScreen({super.key});
+class FdScreen extends StatelessWidget {
+  const FdScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController principle = TextEditingController(text: '3000000');
-    TextEditingController rate = TextEditingController(text: '14');
-    TextEditingController months = TextEditingController(text: '120');
+    TextEditingController principle = TextEditingController(text: '100000');
+    TextEditingController rate = TextEditingController(text: '10');
+    TextEditingController years = TextEditingController(text: '5');
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Emi Calculator'),
+        title: const Text('FD Calculator'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -46,11 +46,11 @@ class EmiScreen extends StatelessWidget {
               height: 10,
             ),
             TextField(
-              controller: months,
+              controller: years,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: 'Months',
-                hintText: 'Enter duration in Months',
+                labelText: 'Years',
+                hintText: 'Enter duration in Years',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -59,11 +59,11 @@ class EmiScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                context.read<EmiBloc>().add(
-                      EmiCalculationEvent(
+                context.read<FdBloc>().add(
+                      FdCalculationEvent(
                         principle: double.parse(principle.text),
                         rate: double.parse(rate.text),
-                        months: double.parse(months.text),
+                        years: double.parse(years.text),
                       ),
                     );
               },
@@ -72,11 +72,11 @@ class EmiScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            BlocBuilder<EmiBloc, EmiState>(
+            BlocBuilder<FdBloc, FdState>(
               builder: ((context, state) {
                 return Text(
                   //'${state.emi.toStringAsFixed(2)}',
-                  state.emi.toStringAsFixed(2),
+                  state.fd.toStringAsFixed(2),
                   style: const TextStyle(
                     fontSize: 18,
                   ),

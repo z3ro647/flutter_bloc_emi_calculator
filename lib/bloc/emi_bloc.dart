@@ -7,6 +7,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'emi_event.dart';
 part 'emi_state.dart';
 
+// EMI calculators also work on the basis of this formula:
+// EMI = [P x R x (1+R)^N]/[(1+R)^N-1].
+// R represents ‘rate of interest’.
+// P denotes your principal amount.
+// N indicates the loan tenure. It is the time within which you must repay the loan amount.
+// Example P = 30,00,000, R = 14%, N = 10 Years
+// N = 10 Years = 120 Months
+// R = 14% = 14/12/100 = 0.011666666666666667
+// EMI = Rs 30,00,000 * 0.0116 * (1 + 0.0116)^120 / ((1 + 0.0116)^120 - 1)
+// EMI = 46579.93
+
 class EmiBloc extends Bloc<EmiEvent, EmiState> {
   EmiBloc() : super(const EmiInitial()) {
     on<EmiCalculationEvent>((event, emit) {
